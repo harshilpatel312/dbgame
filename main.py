@@ -2,16 +2,17 @@ import pygame
 
 pygame.init()
 
-win = pygame.display.set_mode((800, 576))
+win = pygame.display.set_mode((800, 800))
 pygame.display.set_caption("First Game")
 clock = pygame.time.Clock()
 
-sprite = [pygame.image.load('boat1.png'), pygame.image.load('boat2.png'), 
+sprite_original = [pygame.image.load('boat1.png'), pygame.image.load('boat2.png'), 
                pygame.image.load('boat3.png'), pygame.image.load('boat4.png'), 
                pygame.image.load('boat5.png'), pygame.image.load('boat6.png'), 
                pygame.image.load('boat7.png'), pygame.image.load('boat8.png'), 
                pygame.image.load('boat9.png'), pygame.image.load('boat10.png'), 
                pygame.image.load('boat11.png'), pygame.image.load('boat12.png')]
+sprite = [pygame.transform.scale(pygame.transform.flip(x, True, False), (250, 163)) for x in sprite_original]
 
 bg = pygame.image.load('riverbg.jpg')
 bgX = 0
@@ -20,7 +21,7 @@ bgX2 = bg.get_width()
 def redraw_window():
     win.blit(bg, (bgX, 0))
     win.blit(bg, (bgX2, 0))
-    win.blit(sprite[frame//2], (40, 390))
+    win.blit(sprite[frame//2], (40, 550))
 
     pygame.display.update()
 
