@@ -20,11 +20,14 @@ bgX2 = bg.get_width()
 def redraw_window():
     win.blit(bg, (bgX, 0))
     win.blit(bg, (bgX2, 0))
+    win.blit(sprite[frame//2], (40, 390))
+
     pygame.display.update()
 
 speed = 30
-run = True
-while run:
+frame = 0
+running = True
+while running:
     redraw_window()
     clock.tick(speed)
     bgX -= 1.4
@@ -36,7 +39,11 @@ while run:
     if bgX2 < bg.get_width() * -1:
         bgX2 = bg.get_width()
     
+    if frame + 1 >= 24:
+        frame = 0
+    frame += 1
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            running = False
             pygame.quit()
