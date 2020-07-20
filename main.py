@@ -12,7 +12,7 @@ sprite_original = [pygame.image.load('boat1.png'), pygame.image.load('boat2.png'
                pygame.image.load('boat7.png'), pygame.image.load('boat8.png'), 
                pygame.image.load('boat9.png'), pygame.image.load('boat10.png'), 
                pygame.image.load('boat11.png'), pygame.image.load('boat12.png')]
-sprite = [pygame.transform.scale(pygame.transform.flip(x, True, False), (250, 163)) for x in sprite_original]
+sprite = [pygame.transform.scale(x, (250, 163)) for x in sprite_original]
 
 bg = pygame.image.load('riverbg.jpg')
 bgX = 0
@@ -25,12 +25,13 @@ def redraw_window():
 
     pygame.display.update()
 
+pygame.time.set_timer(pygame.USEREVENT+1, 500)
 speed = 30
 frame = 0
 running = True
 while running:
     redraw_window()
-    clock.tick(speed)
+
     bgX -= 1.4
     bgX2 -= 1.4
 
@@ -48,3 +49,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
+
+        if event.type == pygame.USEREVENT+1:
+            speed += 1
+
+    clock.tick(speed)
