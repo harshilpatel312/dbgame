@@ -12,11 +12,11 @@ bgX2 = bg.get_width()
 
 
 player_sprites = [pygame.image.load('sprites/boat1.png'), pygame.image.load('sprites/boat2.png'), 
-               pygame.image.load('sprites/boat3.png'), pygame.image.load('sprites/boat4.png'), 
-               pygame.image.load('sprites/boat5.png'), pygame.image.load('sprites/boat6.png'), 
-               pygame.image.load('sprites/boat7.png'), pygame.image.load('sprites/boat8.png'), 
-               pygame.image.load('sprites/boat9.png'), pygame.image.load('sprites/boat10.png'), 
-               pygame.image.load('sprites/boat11.png'), pygame.image.load('sprites/boat12.png')]
+                  pygame.image.load('sprites/boat3.png'), pygame.image.load('sprites/boat4.png'), 
+                  pygame.image.load('sprites/boat5.png'), pygame.image.load('sprites/boat6.png'), 
+                  pygame.image.load('sprites/boat7.png'), pygame.image.load('sprites/boat8.png'), 
+                  pygame.image.load('sprites/boat9.png'), pygame.image.load('sprites/boat10.png'), 
+                  pygame.image.load('sprites/boat11.png'), pygame.image.load('sprites/boat12.png')]
 
 sprite1 = [pygame.transform.scale(x, (250, 163)) for x in player_sprites]
 
@@ -39,9 +39,14 @@ playerspeed = 5
 while running:
     redraw_window(playerx, playery)
 
+    playerx -= 0.7 # by default, player should move a little faster than the background 
     bgX -= 1.4
     bgX2 -= 1.4
 
+    # so that player doesn't go out of screen
+    if playerx < 0:
+        playerx = 0
+        
     if bgX < bg.get_width() * -1:
         bgX = bg.get_width()
 
@@ -64,7 +69,7 @@ while running:
             playerx += -playerspeed+2
             score -= 1
             print("-1", frame, score)
-            
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
