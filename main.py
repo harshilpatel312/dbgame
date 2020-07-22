@@ -36,23 +36,7 @@ running = True
 player = Sprite(x=40, y=550, speed=5, image_dir="sprites")
 
 while running:
-    redraw_window(player.x, player.y)
-
-    player.x -= (
-        0.7  # by default, player should move a little faster than the background
-    )
-    bgX -= 1.4
-    bgX2 -= 1.4
-
-    # so that player doesn't go out of screen
-    if player.x < 0:
-        player.x = 0
-
-    if bgX < bg.get_width() * -1:
-        bgX = bg.get_width()
-
-    if bgX2 < bg.get_width() * -1:
-        bgX2 = bg.get_width()
+    clock.tick(speed)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -62,8 +46,24 @@ while running:
         if event.type == pygame.USEREVENT:
             game_time -= 1
 
+    # handle background speed
+    bgX -= 1.4
+    bgX2 -= 1.4
+
+    if bgX < bg.get_width() * -1:
+        bgX = bg.get_width()
+
+    if bgX2 < bg.get_width() * -1:
+        bgX2 = bg.get_width()
+
+    # handle player
+    player.x -= 0.7  # by default, player should move a little faster than the background due to paddling action
+
+    if player.x < 0:
+        player.x = 0
+
     if game_time == 0:
         pygame.quit()
         break
 
-    clock.tick(speed)
+    redraw_window(player.x, player.y)
