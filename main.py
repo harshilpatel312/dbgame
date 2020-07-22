@@ -10,7 +10,7 @@ clock = pygame.time.Clock()
 game_time = 10 # seconds
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 
-bg = pygame.image.load('rsz_bg.jpg')
+bg = pygame.image.load("backgrounds/rsz_bg.jpg")
 bgX = 0
 bgX2 = bg.get_width()
 font = pygame.font.SysFont('Consolas', 30)
