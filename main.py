@@ -5,7 +5,7 @@ from sprite import Player, Enemy
 pygame.init()
 
 win = pygame.display.set_mode((1200, 800))
-pygame.display.set_caption("First Game")
+pygame.display.set_caption("Dragon Boating Game")
 
 # time related
 clock = pygame.time.Clock()
@@ -13,9 +13,13 @@ game_time = 30  # seconds
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
 
+# background related
 bg = pygame.image.load("backgrounds/rsz_bg.jpg")
 bgX = 0
 bgX2 = bg.get_width()
+BG_SPEED = 1.4
+
+# miscellaneous
 font = pygame.font.SysFont("Consolas", 30)
 
 
@@ -32,15 +36,12 @@ def redraw_window():
     pygame.display.update()
 
 
-speed = 30
-frame = 0
-running = True
-
 player = Player(x=0, y=550, speed=5, image_dir="sprites/team1/")
 enemy = Enemy(x=0, y=650, speed=15, image_dir="sprites/team2/")
 
+running = True
 while running:
-    clock.tick(speed)
+    clock.tick(30)  # FPS
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -59,9 +60,15 @@ while running:
             pygame.time.set_timer(pygame.USEREVENT + 1, update_time)
 
     # handle background scrolling
-    if game_time > 10:  # stop background scrolling towards the end of the race
-        bgX -= 1.4
-        bgX2 -= 1.4
+    if game_time <= 10:  # stop background scrolling towards the end of the race
+        # after background stops scrolling (towards the end of the race),
+        # sprites should have +ve velocity when there's no keyboard input (space bar)
+        player.x += 2
+        enemy.x += 2
+    else:
+        # scroll background before the end of the race
+        bgX -= BG_SPEED
+        bgX2 -= BG_SPEED
 
         if bgX < bg.get_width() * -1:
             bgX = bg.get_width()
@@ -70,12 +77,8 @@ while running:
             bgX2 = bg.get_width()
 
         # by default, sprites should move faster than the background due to paddling action
-        player.x -= 0.7
-        enemy.x -= 0.7
-    else:
-        # after background stops scrolling (towards the end of the race), sprites should have +ve velocity when there's no keyboard input (space bar)
-        player.x += 2
-        enemy.x += 2
+        player.x -= BG_SPEED / 2
+        enemy.x -= BG_SPEED / 2
 
     if game_time == 0:
         pygame.quit()
