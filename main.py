@@ -1,5 +1,6 @@
 import pygame
-from sprite import Sprite
+import random
+from sprite import Player, Enemy
 
 pygame.init()
 
@@ -8,8 +9,9 @@ pygame.display.set_caption("First Game")
 
 # time related
 clock = pygame.time.Clock()
-game_time = 10  # seconds
+game_time = 30  # seconds
 pygame.time.set_timer(pygame.USEREVENT, 1000)
+pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
 
 bg = pygame.image.load("backgrounds/rsz_bg.jpg")
 bgX = 0
@@ -25,6 +27,7 @@ def redraw_window():
         win.blit(font.render(str(game_time), True, (0, 0, 0)), (32, 48))
 
     player.update(win)
+    enemy.update(win)
 
     pygame.display.update()
 
@@ -33,7 +36,8 @@ speed = 30
 frame = 0
 running = True
 
-player = Sprite(x=40, y=550, speed=5, image_dir="sprites")
+player = Player(x=0, y=550, speed=5, image_dir="sprites/team1/")
+enemy = Enemy(x=0, y=650, speed=15, image_dir="sprites/team2/")
 
 while running:
     clock.tick(speed)
@@ -46,6 +50,14 @@ while running:
         if event.type == pygame.USEREVENT:
             game_time -= 1
 
+        if event.type == pygame.USEREVENT + 1:
+            enemy.x += enemy.speed
+            print("speeding up", enemy.x)
+
+            # randomize time to update USEREVENT+1; results in random speed boosts for enemy
+            update_time = random.randint(400, 600)
+            pygame.time.set_timer(pygame.USEREVENT + 1, update_time)
+
     # handle background speed
     bgX -= 1.4
     bgX2 -= 1.4
@@ -56,11 +68,9 @@ while running:
     if bgX2 < bg.get_width() * -1:
         bgX2 = bg.get_width()
 
-    # handle player
-    player.x -= 0.7  # by default, player should move a little faster than the background due to paddling action
-
-    if player.x < 0:
-        player.x = 0
+    # by default, sprites should move faster than the background due to paddling action
+    player.x -= 0.7
+    enemy.x -= 0.7
 
     if game_time == 0:
         pygame.quit()
