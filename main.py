@@ -6,12 +6,12 @@ win = pygame.display.set_mode((800, 800))
 pygame.display.set_caption("First Game")
 clock = pygame.time.Clock()
 
-sprite_original = [pygame.image.load('boat1.png'), pygame.image.load('boat2.png'), 
-               pygame.image.load('boat3.png'), pygame.image.load('boat4.png'), 
-               pygame.image.load('boat5.png'), pygame.image.load('boat6.png'), 
-               pygame.image.load('boat7.png'), pygame.image.load('boat8.png'), 
-               pygame.image.load('boat9.png'), pygame.image.load('boat10.png'), 
-               pygame.image.load('boat11.png'), pygame.image.load('boat12.png')]
+sprite_original = [pygame.image.load('sprites/boat1.png'), pygame.image.load('sprites/boat2.png'), 
+               pygame.image.load('sprites/boat3.png'), pygame.image.load('sprites/boat4.png'), 
+               pygame.image.load('sprites/boat5.png'), pygame.image.load('sprites/boat6.png'), 
+               pygame.image.load('sprites/boat7.png'), pygame.image.load('sprites/boat8.png'), 
+               pygame.image.load('sprites/boat9.png'), pygame.image.load('sprites/boat10.png'), 
+               pygame.image.load('sprites/boat11.png'), pygame.image.load('sprites/boat12.png')]
 sprite = [pygame.transform.scale(x, (250, 163)) for x in sprite_original]
 
 bg = pygame.image.load('riverbg.jpg')
