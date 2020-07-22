@@ -4,12 +4,13 @@ from sprite import Player, Enemy
 
 pygame.init()
 
-win = pygame.display.set_mode((1200, 800))
+WIDTH, HEIGHT = 1200, 800
+win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Dragon Boating Game")
 
 # time related
 clock = pygame.time.Clock()
-game_time = 30  # seconds
+TOTAL_GAME_TIME = game_time = 30  # seconds
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
 
@@ -60,11 +61,29 @@ while running:
             pygame.time.set_timer(pygame.USEREVENT + 1, update_time)
 
     # handle background scrolling
-    if game_time <= 10:  # stop background scrolling towards the end of the race
+    if (
+        game_time < TOTAL_GAME_TIME * 0.25
+    ):  # stop background scrolling towards the end of the race
         # after background stops scrolling (towards the end of the race),
-        # sprites should have +ve velocity when there's no keyboard input (space bar)
+        # sprites should have +ve velocity when "idling" (no keyboard input)
         player.x += 2
         enemy.x += 2
+
+        # if after stopping background scrolling, player or enemy is
+        # more than half-way through the screen, start scrolling again
+        if (
+            player.x + player.spritesheet[0].get_width() > WIDTH / 2
+            or enemy.x + player.spritesheet[0].get_width() > WIDTH / 2
+        ):
+            bgX -= BG_SPEED * 1.2
+            bgX2 -= BG_SPEED * 1.2
+
+            if bgX < bg.get_width() * -1:
+                bgX = bg.get_width()
+
+            if bgX2 < bg.get_width() * -1:
+                bgX2 = bg.get_width()
+
     else:
         # scroll background before the end of the race
         bgX -= BG_SPEED
