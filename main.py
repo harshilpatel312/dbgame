@@ -58,19 +58,24 @@ while running:
             update_time = random.randint(400, 600)
             pygame.time.set_timer(pygame.USEREVENT + 1, update_time)
 
-    # handle background speed
-    bgX -= 1.4
-    bgX2 -= 1.4
+    # handle background scrolling
+    if game_time > 10:  # stop background scrolling towards the end of the race
+        bgX -= 1.4
+        bgX2 -= 1.4
 
-    if bgX < bg.get_width() * -1:
-        bgX = bg.get_width()
+        if bgX < bg.get_width() * -1:
+            bgX = bg.get_width()
 
-    if bgX2 < bg.get_width() * -1:
-        bgX2 = bg.get_width()
+        if bgX2 < bg.get_width() * -1:
+            bgX2 = bg.get_width()
 
-    # by default, sprites should move faster than the background due to paddling action
-    player.x -= 0.7
-    enemy.x -= 0.7
+        # by default, sprites should move faster than the background due to paddling action
+        player.x -= 0.7
+        enemy.x -= 0.7
+    else:
+        # after background stops scrolling (towards the end of the race), sprites should have +ve velocity when there's no keyboard input (space bar)
+        player.x += 2
+        enemy.x += 2
 
     if game_time == 0:
         pygame.quit()
