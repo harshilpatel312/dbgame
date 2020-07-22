@@ -8,7 +8,8 @@ class Sprite:
         self.speed = speed
         self.spritesheet = [
             pygame.transform.scale(
-                pygame.image.load("{}/boat{}.png".format(image_dir, image)), (250, 163)
+                pygame.image.load("{}boat{}.png".format(image_dir, image)),  # FIXME
+                (250, 163),
             )
             for image in range(1, 13)
         ]

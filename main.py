@@ -17,7 +17,7 @@ bgX2 = bg.get_width()
 font = pygame.font.SysFont("Consolas", 30)
 
 
-def redraw_window(x, y):
+def redraw_window():
     win.blit(bg, (bgX, 0))
     win.blit(pygame.transform.flip(bg, True, False), (bgX2, 0))
 
@@ -66,4 +66,4 @@ while running:
         pygame.quit()
         break
 
-    redraw_window(player.x, player.y)
+    redraw_window()
