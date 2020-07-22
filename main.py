@@ -10,7 +10,7 @@ clock = pygame.time.Clock()
 game_time = 10 # seconds
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 
-bg = pygame.image.load('riverbg.jpg')
+bg = pygame.image.load('rsz_bg.jpg')
 bgX = 0
 bgX2 = bg.get_width()
 font = pygame.font.SysFont('Consolas', 30)
@@ -26,7 +26,7 @@ sprite1 = [pygame.transform.scale(x, (250, 163)) for x in player_sprites]
 
 def redraw_window(x, y):
     win.blit(bg, (bgX, 0))
-    win.blit(bg, (bgX2, 0))
+    win.blit(pygame.transform.flip(bg, True, False), (bgX2, 0))
     win.blit(sprite1[frame//2], (x, y))
 
     if game_time <= 3:
