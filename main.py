@@ -4,12 +4,16 @@ pygame.init()
 
 win = pygame.display.set_mode((1200, 800))
 pygame.display.set_caption("First Game")
+
+# time related
 clock = pygame.time.Clock()
+game_time = 10 # seconds
+pygame.time.set_timer(pygame.USEREVENT, 1000)
 
 bg = pygame.image.load('riverbg.jpg')
 bgX = 0
 bgX2 = bg.get_width()
-
+font = pygame.font.SysFont('Consolas', 30)
 
 player_sprites = [pygame.image.load('sprites/boat1.png'), pygame.image.load('sprites/boat2.png'), 
                   pygame.image.load('sprites/boat3.png'), pygame.image.load('sprites/boat4.png'), 
@@ -24,6 +28,9 @@ def redraw_window(x, y):
     win.blit(bg, (bgX, 0))
     win.blit(bg, (bgX2, 0))
     win.blit(sprite1[frame//2], (x, y))
+
+    if game_time <= 3:
+        win.blit(font.render(str(game_time), True, (0, 0, 0)), (32, 48))
 
     pygame.display.update()
 
@@ -74,5 +81,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
+
+        if event.type == pygame.USEREVENT:
+            game_time -= 1
+
+    if game_time == 0:
+        pygame.quit()
 
     clock.tick(speed)
