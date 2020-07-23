@@ -82,7 +82,7 @@ while running:
         # start scrolling faster
         if (
             player.x + player.spritesheet[0].get_width() > WIDTH / 2
-            or enemy.x + player.spritesheet[0].get_width() > WIDTH / 2
+            or enemy.x + enemy.spritesheet[0].get_width() > WIDTH / 2
         ):
             # speed up background scrolling
             background.scroll(speed=background.bg_speed * 1.2)
@@ -106,7 +106,10 @@ while running:
             player.x += 2
             enemy.x += 2
 
-    if remaining_game_time == 0:
+    if (
+        finish_line.x1 - (player.x + player.spritesheet[0].get_width()) < 5
+        or finish_line.x1 - (enemy.x + enemy.spritesheet[0].get_width()) < 5
+    ):
         pygame.quit()
         break
 
