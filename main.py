@@ -37,13 +37,13 @@ def redraw_window():
     pygame.display.update()
 
 
-def draw_text(text):
+def draw_text(text, x, y):
     background.update(win)
 
-    player.pregame_update(win)
-    enemy.pregame_update(win)
+    player.update_once(win)
+    enemy.update_once(win)
 
-    win.blit(font.render(text, True, (0, 0, 0)), (WIDTH / 2, HEIGHT / 2))
+    win.blit(font.render(text, True, (0, 0, 0)), (x, y))
 
     pygame.display.update()
 
@@ -62,7 +62,7 @@ finish_line = FinishLine(
 
 # pregame countdown
 for t in range(3, 0, -1):
-    draw_text(str(t))
+    draw_text(str(t), x=WIDTH / 2, y=HEIGHT / 2)
     time.sleep(1)
 
 # actual game
@@ -81,7 +81,6 @@ while running:
 
         if event.type == pygame.USEREVENT + 1:
             enemy.x += enemy.speed
-            print("speeding up", enemy.x)
 
             # randomize time to update USEREVENT+1; results in random speed boosts for enemy
             update_time = random.randint(400, 600)
@@ -125,10 +124,22 @@ while running:
             player.x += 2
             enemy.x += 2
 
-    if (
-        finish_line.x1 - (player.x + player.spritesheet[0].get_width()) < 5
-        or finish_line.x1 - (enemy.x + enemy.spritesheet[0].get_width()) < 5
-    ):
+    playerposition = finish_line.x1 - (
+        player.x + player.spritesheet[0].get_width() - 10
+    )
+    enemyposition = finish_line.x1 - (enemy.x + enemy.spritesheet[0].get_width() - 10)
+    if playerposition < 0 or enemyposition < 0:
+        time.sleep(1)
+
+        if playerposition < enemyposition:
+            text = "YOU WON!"
+            draw_text(text, x=WIDTH / 2 - 300, y=HEIGHT / 2)
+        else:
+            text = "WHAT A LOSER"
+            draw_text(text, x=WIDTH / 2 - 400, y=HEIGHT / 2)
+
+        time.sleep(1)
+
         pygame.quit()
         break
 

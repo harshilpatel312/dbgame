@@ -51,7 +51,7 @@ class Player(Sprite):
 
         screen.blit(self.spritesheet[self.spriteframe // 2], (self.x, self.y))
 
-    def pregame_update(self, screen):
+    def update_once(self, screen):
         screen.blit(self.spritesheet[0], (self.x, self.y))
 
 
@@ -82,7 +82,7 @@ class Enemy(Sprite):
             self.spritesheet[int(self.spriteframe // 2.25)], (self.x, self.y),
         )
 
-    def pregame_update(self, screen):
+    def update_once(self, screen):
         screen.blit(self.spritesheet[0], (self.x, self.y))
 
 
