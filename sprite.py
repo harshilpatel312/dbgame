@@ -75,7 +75,9 @@ class Enemy(Sprite):
             self.spriteframe = 0
         self.spriteframe += 1
 
-        screen.blit(self.spritesheet[self.spriteframe // 2], (self.x, self.y))
+        screen.blit(
+            self.spritesheet[int(self.spriteframe // 2.25)], (self.x, self.y),
+        )
 
 
 class Buoy(Sprite):
