@@ -1,6 +1,6 @@
 import pygame
 import random
-from sprite import Player, Enemy
+from sprite import Player, Enemy, Buoy
 from background import Background
 
 pygame.init()
@@ -26,8 +26,10 @@ def redraw_window():
     if remaining_game_time <= 3:
         win.blit(font.render(str(remaining_game_time), True, (0, 0, 0)), (32, 48))
 
+    buoy1.update(win)  # should be behind the boat
     player.update(win)
     enemy.update(win)
+    buoy2.update(win)  # should be in front the boat
 
     pygame.display.update()
 
@@ -35,6 +37,9 @@ def redraw_window():
 background = Background(image="backgrounds/rsz_bg.jpg")
 player = Player(x=0, y=550, speed=5, image_dir="sprites/team1/")
 enemy = Enemy(x=0, y=650, speed=15, image_dir="sprites/team2/")
+buoy1 = Buoy(x=WIDTH + 100, y=610, speed=0, image="sprites/buoyo.png")
+buoy2 = Buoy(x=WIDTH + 100, y=740, speed=0, image="sprites/buoyo.png")
+x1, x2 = WIDTH + 100, WIDTH + 100
 
 running = True
 while running:
@@ -67,6 +72,10 @@ while running:
         enemy.x -= background.bg_speed / 2
 
     else:
+        # move buoys with the background
+        buoy1.speed = background.bg_speed
+        buoy2.speed = background.bg_speed
+
         # stop background scrolling towards the end of the race
         background.scroll(speed=0)
 
@@ -81,7 +90,12 @@ while running:
             player.x + player.spritesheet[0].get_width() > WIDTH / 2
             or enemy.x + player.spritesheet[0].get_width() > WIDTH / 2
         ):
+            # resume background scrolling
             background.scroll(speed=background.bg_speed * 1.2)
+
+            # speed up buoy movement
+            buoy1.speed = background.bg_speed * 1.2
+            buoy2.speed = background.bg_speed * 1.2
 
     if remaining_game_time == 0:
         pygame.quit()

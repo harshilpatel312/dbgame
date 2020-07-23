@@ -76,3 +76,19 @@ class Enemy(Sprite):
         self.spriteframe += 1
 
         screen.blit(self.spritesheet[self.spriteframe // 2], (self.x, self.y))
+
+
+class Buoy(Sprite):
+    def __init__(self, x, y, speed, image):
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.image = pygame.image.load(image)
+
+    def update(self, screen):
+        self.x += -self.speed
+
+        if self.x < 0:
+            self.x = 0
+
+        screen.blit(self.image, (self.x, self.y))
