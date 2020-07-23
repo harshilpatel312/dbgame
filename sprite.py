@@ -51,6 +51,9 @@ class Player(Sprite):
 
         screen.blit(self.spritesheet[self.spriteframe // 2], (self.x, self.y))
 
+    def pregame_update(self, screen):
+        screen.blit(self.spritesheet[0], (self.x, self.y))
+
 
 class Enemy(Sprite):
     def __init__(self, x, y, speed, image_dir):
@@ -78,6 +81,9 @@ class Enemy(Sprite):
         screen.blit(
             self.spritesheet[int(self.spriteframe // 2.25)], (self.x, self.y),
         )
+
+    def pregame_update(self, screen):
+        screen.blit(self.spritesheet[0], (self.x, self.y))
 
 
 class Buoy(Sprite):

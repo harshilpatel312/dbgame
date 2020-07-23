@@ -1,7 +1,9 @@
-import pygame
+import time
 import random
-from sprite import Player, Enemy, Buoy, FinishLine
+import pygame
+
 from background import Background
+from sprite import Player, Enemy, Buoy, FinishLine
 
 pygame.init()
 
@@ -17,7 +19,7 @@ pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
 
 
 # miscellaneous
-font = pygame.font.SysFont("Consolas", 30)
+font = pygame.font.SysFont("Consolas", 150)
 
 
 def redraw_window():
@@ -35,6 +37,17 @@ def redraw_window():
     pygame.display.update()
 
 
+def draw_text(text):
+    background.update(win)
+
+    player.pregame_update(win)
+    enemy.pregame_update(win)
+
+    win.blit(font.render(text, True, (0, 0, 0)), (WIDTH / 2, HEIGHT / 2))
+
+    pygame.display.update()
+
+
 background = Background(image="backgrounds/rsz_bg.jpg")
 player = Player(x=0, y=550, speed=5, image_dir="sprites/team1/")
 enemy = Enemy(x=0, y=650, speed=15, image_dir="sprites/team2/")
@@ -47,6 +60,12 @@ finish_line = FinishLine(
     y2=740 + 40,
 )
 
+# pregame countdown
+for t in range(3, 0, -1):
+    draw_text(str(t))
+    time.sleep(1)
+
+# actual game
 running = True
 while running:
     clock.tick(30)  # FPS
