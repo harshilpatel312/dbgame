@@ -11,7 +11,7 @@ pygame.display.set_caption("Dragon Boating Game")
 
 # time related
 clock = pygame.time.Clock()
-TOTAL_GAME_TIME = game_time = 30  # seconds
+TOTAL_GAME_TIME = remaining_game_time = 30  # seconds
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
 
@@ -23,8 +23,8 @@ font = pygame.font.SysFont("Consolas", 30)
 def redraw_window():
     background.update(win)
 
-    if game_time <= 3:
-        win.blit(font.render(str(game_time), True, (0, 0, 0)), (32, 48))
+    if remaining_game_time <= 3:
+        win.blit(font.render(str(remaining_game_time), True, (0, 0, 0)), (32, 48))
 
     player.update(win)
     enemy.update(win)
@@ -47,7 +47,7 @@ while running:
             pygame.quit()
 
         if event.type == pygame.USEREVENT:
-            game_time -= 1
+            remaining_game_time -= 1
 
         if event.type == pygame.USEREVENT + 1:
             enemy.x += enemy.speed
@@ -58,7 +58,15 @@ while running:
             pygame.time.set_timer(pygame.USEREVENT + 1, update_time)
 
     # handle time and speeds of objects
-    if game_time < TOTAL_GAME_TIME * 0.25:
+    if remaining_game_time >= TOTAL_GAME_TIME * 0.25:
+        # scroll background at normal speed
+        background.scroll(speed=background.bg_speed)
+
+        # by default, sprites should move faster than the background due to paddling action
+        player.x -= background.bg_speed / 2
+        enemy.x -= background.bg_speed / 2
+
+    else:
         # stop background scrolling towards the end of the race
         background.scroll(speed=0)
 
@@ -75,14 +83,7 @@ while running:
         ):
             background.scroll(speed=background.bg_speed * 1.2)
 
-    else:
-        background.scroll(speed=background.bg_speed)
-
-        # by default, sprites should move faster than the background due to paddling action
-        player.x -= background.bg_speed / 2
-        enemy.x -= background.bg_speed / 2
-
-    if game_time == 0:
+    if remaining_game_time == 0:
         pygame.quit()
         break
 
