@@ -23,13 +23,13 @@ font = pygame.font.SysFont("Consolas", 30)
 def redraw_window():
     background.update(win)
 
-    if remaining_game_time <= 3:
-        win.blit(font.render(str(remaining_game_time), True, (0, 0, 0)), (32, 48))
-
     buoy1.update(win)  # should be behind the boat
+
     finish_line.update(win)
+
     player.update(win)
     enemy.update(win)
+
     buoy2.update(win)  # should be in front the boat
 
     pygame.display.update()
