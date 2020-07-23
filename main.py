@@ -72,30 +72,30 @@ while running:
         enemy.x -= background.bg_speed / 2
 
     else:
-        # move buoys with the background
-        buoy1.speed = background.bg_speed
-        buoy2.speed = background.bg_speed
-
-        # stop background scrolling towards the end of the race
-        background.scroll(speed=0)
-
-        # after background stops scrolling (towards the end of the race),
-        # sprites should have +ve velocity when "idling" (no keyboard input)
-        player.x += 2
-        enemy.x += 2
-
-        # if after stopping background scrolling, player or enemy is
-        # more than half-way through the screen, start scrolling again
+        # if near the end of the race, sprites are half-way through the screen,
+        # start scrolling faster
         if (
             player.x + player.spritesheet[0].get_width() > WIDTH / 2
             or enemy.x + player.spritesheet[0].get_width() > WIDTH / 2
         ):
-            # resume background scrolling
+            # speed up background scrolling
             background.scroll(speed=background.bg_speed * 1.2)
 
             # speed up buoy movement
             buoy1.speed = background.bg_speed * 1.2
             buoy2.speed = background.bg_speed * 1.2
+        else:
+            # stop background scrolling if sprites are not half-way
+            background.scroll(speed=0)
+
+            # move buoys with the background
+            buoy1.speed = background.bg_speed
+            buoy2.speed = background.bg_speed
+
+            # after background stops scrolling (towards the end of the race),
+            # sprites should have +ve velocity when "idling" (no keyboard input)
+            player.x += 2
+            enemy.x += 2
 
     if remaining_game_time == 0:
         pygame.quit()
