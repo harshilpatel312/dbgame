@@ -92,3 +92,23 @@ class Buoy(Sprite):
             self.x = 0
 
         screen.blit(self.image, (self.x, self.y))
+
+
+class FinishLine:
+    def __init__(self, x1, y1, x2, y2):
+        self.x1 = x1
+        self.y1 = y1
+        self.x2 = x2
+        self.y2 = y2
+        self.speed = 0
+
+        self.color = (255, 0, 0)  # red
+        self.thickness = 7
+
+    def update(self, screen):
+        self.x1 += -self.speed
+        self.x2 += -self.speed
+
+        pygame.draw.line(
+            screen, self.color, (self.x1, self.y1), (self.x2, self.y2), self.thickness,
+        )

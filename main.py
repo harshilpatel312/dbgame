@@ -1,6 +1,6 @@
 import pygame
 import random
-from sprite import Player, Enemy, Buoy
+from sprite import Player, Enemy, Buoy, FinishLine
 from background import Background
 
 pygame.init()
@@ -27,6 +27,7 @@ def redraw_window():
         win.blit(font.render(str(remaining_game_time), True, (0, 0, 0)), (32, 48))
 
     buoy1.update(win)  # should be behind the boat
+    finish_line.update(win)
     player.update(win)
     enemy.update(win)
     buoy2.update(win)  # should be in front the boat
@@ -39,7 +40,12 @@ player = Player(x=0, y=550, speed=5, image_dir="sprites/team1/")
 enemy = Enemy(x=0, y=650, speed=15, image_dir="sprites/team2/")
 buoy1 = Buoy(x=WIDTH + 100, y=610, speed=0, image="sprites/buoyo.png")
 buoy2 = Buoy(x=WIDTH + 100, y=740, speed=0, image="sprites/buoyo.png")
-x1, x2 = WIDTH + 100, WIDTH + 100
+finish_line = FinishLine(
+    x1=WIDTH + 100 + buoy1.image.get_width() / 2,
+    y1=610 + 50,
+    x2=WIDTH + 100 + buoy1.image.get_width() / 2,
+    y2=740 + 40,
+)
 
 running = True
 while running:
@@ -81,16 +87,19 @@ while running:
             # speed up background scrolling
             background.scroll(speed=background.bg_speed * 1.2)
 
-            # speed up buoy movement
+            # speed up buoy + finish line movement
             buoy1.speed = background.bg_speed * 1.2
             buoy2.speed = background.bg_speed * 1.2
+            finish_line.speed = background.bg_speed * 1.2
+
         else:
             # stop background scrolling if sprites are not half-way
             background.scroll(speed=0)
 
-            # move buoys with the background
+            # move buoys + finish line with the background
             buoy1.speed = background.bg_speed
             buoy2.speed = background.bg_speed
+            finish_line.speed = background.bg_speed
 
             # after background stops scrolling (towards the end of the race),
             # sprites should have +ve velocity when "idling" (no keyboard input)
