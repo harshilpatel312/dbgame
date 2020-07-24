@@ -40,10 +40,16 @@ def redraw_window():
 def draw_text(text, x, y):
     background.update(win)
 
+    buoy1.update(win)  # should be behind the boat
+
+    finish_line.update(win)
+
     player.update_once(win)
     enemy.update_once(win)
 
     win.blit(font.render(text, True, (0, 0, 0)), (x, y))
+
+    buoy2.update(win)  # should be in front the boat
 
     pygame.display.update()
 
@@ -124,12 +130,13 @@ while running:
             player.x += 2
             enemy.x += 2
 
+    # check for game end
     playerposition = finish_line.x1 - (
         player.x + player.spritesheet[0].get_width() - 10
     )
     enemyposition = finish_line.x1 - (enemy.x + enemy.spritesheet[0].get_width() - 10)
     if playerposition < 0 or enemyposition < 0:
-        time.sleep(1)
+        time.sleep(0.5)
 
         if playerposition < enemyposition:
             text = "YOU WON!"
@@ -138,7 +145,7 @@ while running:
             text = "WHAT A LOSER"
             draw_text(text, x=WIDTH / 2 - 400, y=HEIGHT / 2)
 
-        time.sleep(1)
+        time.sleep(3)
 
         pygame.quit()
         break
