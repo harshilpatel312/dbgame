@@ -18,7 +18,9 @@ class Player(Sprite):
         self.y = y
         self.speed = speed
         self.spriteframe = 0
-        self.score = 0
+
+        # boost related
+        self.boost_counter = 0
 
         self.spritesheet = [
             pygame.transform.scale(
@@ -40,14 +42,18 @@ class Player(Sprite):
 
         if keys[pygame.K_SPACE]:
             if self.spriteframe > 0 and self.spriteframe <= 8:
+                self.boost_counter += 1
                 self.x += self.speed
-                self.score += 1
-                print("+1", self.spriteframe, self.score)
+                print("+1", self.spriteframe, self.boost_counter)
 
             if self.spriteframe > 8:
                 self.x += -self.speed + 2
-                self.score -= 1
-                print("-1", self.spriteframe, self.score)
+                print("-1", self.spriteframe)
+
+        if keys[pygame.K_x]:
+            if self.boost_counter > 30:
+                self.x += self.speed + 30
+                self.boost_counter = 0
 
         screen.blit(self.spritesheet[self.spriteframe // 2], (self.x, self.y))
 
