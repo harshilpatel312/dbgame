@@ -20,6 +20,9 @@ pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
 
 # miscellaneous
 font = pygame.font.SysFont("Consolas", 150)
+start = pygame.mixer.Sound("start.wav")
+horn = pygame.mixer.Sound("horn.wav")
+racemusic = pygame.mixer.music.load("race.wav")
 
 
 def redraw_window():
@@ -67,11 +70,16 @@ finish_line = FinishLine(
 )
 
 # pregame countdown
+start.play()
+time.sleep(2)
 for t in range(3, 0, -1):
     draw_text(str(t), x=WIDTH / 2, y=HEIGHT / 2)
+    if t == 1:
+        horn.play()
     time.sleep(1)
 
 # actual game
+pygame.mixer.music.play(-1)
 running = True
 while running:
     clock.tick(30)  # FPS
@@ -137,7 +145,7 @@ while running:
     enemyposition = finish_line.x1 - (enemy.x + enemy.spritesheet[0].get_width() - 10)
     if playerposition < 0 or enemyposition < 0:
         time.sleep(0.5)
-
+        pygame.mixer.music.stop()
         if playerposition < enemyposition:
             text = "YOU WON!"
             draw_text(text, x=WIDTH / 2 - 300, y=HEIGHT / 2)
