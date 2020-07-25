@@ -25,6 +25,20 @@ start = pygame.mixer.Sound("start.wav")
 horn = pygame.mixer.Sound("horn.wav")
 racemusic = pygame.mixer.music.load("race.wav")
 
+# instantiate
+background = Background(image="backgrounds/rsz_bg.jpg")
+player = Player(x=0, y=675, speed=5, image_dir="sprites/team1/")
+enemy1 = Enemy(x=0, y=550, speed=15, image_dir="sprites/team2/")
+enemy2 = Enemy(x=0, y=800, speed=15, image_dir="sprites/team3/")
+buoy1 = Buoy(x=WIDTH + 100, y=610, speed=0, image="sprites/buoyo.png")
+buoy2 = Buoy(x=WIDTH + 100, y=910, speed=0, image="sprites/buoyo.png")
+finish_line = FinishLine(
+    x1=WIDTH + 100 + buoy1.image.get_width() / 2,
+    y1=610 + 50,
+    x2=WIDTH + 100 + buoy1.image.get_width() / 2,
+    y2=910 + 40,
+)
+
 
 def redraw_window():
     background.update(win)
@@ -59,19 +73,6 @@ def draw_text(text, x, y):
 
     pygame.display.update()
 
-
-background = Background(image="backgrounds/rsz_bg.jpg")
-player = Player(x=0, y=675, speed=5, image_dir="sprites/team1/")
-enemy1 = Enemy(x=0, y=550, speed=15, image_dir="sprites/team2/")
-enemy2 = Enemy(x=0, y=800, speed=15, image_dir="sprites/team3/")
-buoy1 = Buoy(x=WIDTH + 100, y=610, speed=0, image="sprites/buoyo.png")
-buoy2 = Buoy(x=WIDTH + 100, y=910, speed=0, image="sprites/buoyo.png")
-finish_line = FinishLine(
-    x1=WIDTH + 100 + buoy1.image.get_width() / 2,
-    y1=610 + 50,
-    x2=WIDTH + 100 + buoy1.image.get_width() / 2,
-    y2=910 + 40,
-)
 
 # pregame countdown
 start.play()
