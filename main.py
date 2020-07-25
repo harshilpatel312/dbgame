@@ -7,7 +7,7 @@ from sprite import Player, Enemy, Buoy, FinishLine
 
 pygame.init()
 
-WIDTH, HEIGHT = 1200, 800
+WIDTH, HEIGHT = 1200, 1000
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Dragon Boating Game")
 
@@ -16,6 +16,7 @@ clock = pygame.time.Clock()
 TOTAL_GAME_TIME = remaining_game_time = 30  # seconds
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
+pygame.time.set_timer(pygame.USEREVENT + 2, 1000)
 
 
 # miscellaneous
@@ -32,8 +33,9 @@ def redraw_window():
 
     finish_line.update(win)
 
+    enemy1.update(win)
     player.update(win)
-    enemy.update(win)
+    enemy2.update(win)
 
     buoy2.update(win)  # should be in front the boat
 
@@ -47,8 +49,9 @@ def draw_text(text, x, y):
 
     finish_line.update(win)
 
+    enemy1.update_once(win)
     player.update_once(win)
-    enemy.update_once(win)
+    enemy2.update_once(win)
 
     win.blit(font.render(text, True, (0, 0, 0)), (x, y))
 
@@ -58,15 +61,16 @@ def draw_text(text, x, y):
 
 
 background = Background(image="backgrounds/rsz_bg.jpg")
-player = Player(x=0, y=550, speed=5, image_dir="sprites/team1/")
-enemy = Enemy(x=0, y=650, speed=15, image_dir="sprites/team2/")
+player = Player(x=0, y=675, speed=5, image_dir="sprites/team1/")
+enemy1 = Enemy(x=0, y=550, speed=15, image_dir="sprites/team2/")
+enemy2 = Enemy(x=0, y=800, speed=15, image_dir="sprites/team3/")
 buoy1 = Buoy(x=WIDTH + 100, y=610, speed=0, image="sprites/buoyo.png")
-buoy2 = Buoy(x=WIDTH + 100, y=740, speed=0, image="sprites/buoyo.png")
+buoy2 = Buoy(x=WIDTH + 100, y=910, speed=0, image="sprites/buoyo.png")
 finish_line = FinishLine(
     x1=WIDTH + 100 + buoy1.image.get_width() / 2,
     y1=610 + 50,
     x2=WIDTH + 100 + buoy1.image.get_width() / 2,
-    y2=740 + 40,
+    y2=910 + 40,
 )
 
 # pregame countdown
@@ -94,11 +98,18 @@ while running:
             remaining_game_time -= 1
 
         if event.type == pygame.USEREVENT + 1:
-            enemy.x += enemy.speed
+            enemy1.x += enemy1.speed
 
             # randomize time to update USEREVENT+1; results in random speed boosts for enemy
             update_time = random.randint(400, 600)
             pygame.time.set_timer(pygame.USEREVENT + 1, update_time)
+
+        if event.type == pygame.USEREVENT + 2:
+            enemy2.x += enemy2.speed
+
+            # randomize time to update USEREVENT+1; results in random speed boosts for enemy
+            update_time = random.randint(300, 500)
+            pygame.time.set_timer(pygame.USEREVENT + 2, update_time)
 
     # handle time and speeds of objects
     if remaining_game_time >= TOTAL_GAME_TIME * 0.25:
@@ -107,14 +118,16 @@ while running:
 
         # by default, sprites should move faster than the background due to paddling action
         player.x -= background.bg_speed / 2
-        enemy.x -= background.bg_speed / 2
+        enemy1.x -= background.bg_speed / 2
+        enemy2.x -= background.bg_speed / 2
 
     else:
         # if near the end of the race, sprites are half-way through the screen,
         # start scrolling faster
         if (
             player.x + player.spritesheet[0].get_width() > WIDTH / 2
-            or enemy.x + enemy.spritesheet[0].get_width() > WIDTH / 2
+            or enemy1.x + enemy1.spritesheet[0].get_width() > WIDTH / 2
+            or enemy2.x + enemy2.spritesheet[0].get_width() > WIDTH / 2
         ):
             # speed up background scrolling
             background.scroll(speed=background.bg_speed * 1.2)
@@ -136,17 +149,23 @@ while running:
             # after background stops scrolling (towards the end of the race),
             # sprites should have +ve velocity when "idling" (no keyboard input)
             player.x += 2
-            enemy.x += 2
+            enemy1.x += 2
+            enemy2.x += 2
 
     # check for game end
     playerposition = finish_line.x1 - (
         player.x + player.spritesheet[0].get_width() - 10
     )
-    enemyposition = finish_line.x1 - (enemy.x + enemy.spritesheet[0].get_width() - 10)
-    if playerposition < 0 or enemyposition < 0:
+    enemy1position = finish_line.x1 - (
+        enemy1.x + enemy1.spritesheet[0].get_width() - 10
+    )
+    enemy2position = finish_line.x1 - (
+        enemy2.x + enemy2.spritesheet[0].get_width() - 10
+    )
+    if playerposition < 0 or enemy1position < 0 or enemy2position < 0:
         time.sleep(0.5)
         pygame.mixer.music.stop()
-        if playerposition < enemyposition:
+        if playerposition < enemy1position and playerposition < enemy2position:
             text = "YOU WON!"
             draw_text(text, x=WIDTH / 2 - 300, y=HEIGHT / 2)
         else:
