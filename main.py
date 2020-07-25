@@ -15,8 +15,7 @@ pygame.display.set_caption("Dragon Boating Game")
 clock = pygame.time.Clock()
 TOTAL_GAME_TIME = remaining_game_time = 30  # seconds
 pygame.time.set_timer(pygame.USEREVENT, 1000)
-pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
-pygame.time.set_timer(pygame.USEREVENT + 2, 1000)
+pygame.time.set_timer(pygame.USEREVENT + 1, 800)
 
 
 # miscellaneous
@@ -99,18 +98,8 @@ while running:
             remaining_game_time -= 1
 
         if event.type == pygame.USEREVENT + 1:
-            enemy1.x += enemy1.speed
-
-            # randomize time to update USEREVENT+1; results in random speed boosts for enemy
-            update_time = random.randint(400, 600)
-            pygame.time.set_timer(pygame.USEREVENT + 1, update_time)
-
-        if event.type == pygame.USEREVENT + 2:
-            enemy2.x += enemy2.speed
-
-            # randomize time to update USEREVENT+1; results in random speed boosts for enemy
-            update_time = random.randint(300, 500)
-            pygame.time.set_timer(pygame.USEREVENT + 2, update_time)
+            enemy1.x += enemy1.speed + random.randint(5, 10)
+            enemy2.x += enemy2.speed + random.randint(5, 10)
 
     # handle time and speeds of objects
     if remaining_game_time >= TOTAL_GAME_TIME * 0.25:
